@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import SuggestionsList from "./suggestions-list";
+import debounce from "lodash/debounce";
 
 export default function Autocomplete({
   placeholder,
@@ -21,7 +22,6 @@ export default function Autocomplete({
   };
 
   const getSuggestions = async (query) => {
-    console.log(fetchSuggestions, staticData);
     setError(null);
     setLoading(true);
     try {
@@ -43,15 +43,26 @@ export default function Autocomplete({
     }
   };
 
+  const getSuggestionsDebounced = useCallback(
+    debounce(getSuggestions, 300),
+    []
+  );
+
   useEffect(() => {
     if (inputValue.length > 1) {
-      getSuggestions(inputValue);
+      getSuggestionsDebounced(inputValue);
     } else {
       setSuggestions([]);
     }
   }, [inputValue]);
 
-  const handleSuggestionClick = () => {};
+  const handleSuggestionClick = (suggestion) => {
+    setInputValue(dataKey ? suggestion[dataKey] : suggestion);
+    onSelect(suggestion);
+    setSuggestions([]);
+  };
+
+  console.log(">>>", suggestions);
 
   return (
     <div>
