@@ -25,6 +25,7 @@ function App() {
         dataKey={"name"}
         customLoader={<div>loading...</div>}
         onChange={(input) => console.log(input)}
+        onSelect={(suggestion) => console.log(suggestion)}
       />
     </div>
   );

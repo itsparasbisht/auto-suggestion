@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import SuggestionsList from "./suggestions-list";
 
 export default function Autocomplete({
   placeholder,
@@ -7,6 +8,7 @@ export default function Autocomplete({
   dataKey,
   customLoader,
   onChange,
+  onSelect,
 }) {
   const [inputValue, setInputValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -49,6 +51,8 @@ export default function Autocomplete({
     }
   }, [inputValue]);
 
+  const handleSuggestionClick = () => {};
+
   return (
     <div>
       <input
@@ -61,6 +65,15 @@ export default function Autocomplete({
       {error && <p>{error}</p>}
 
       {loading && <div>{customLoader}</div>}
+
+      <ul>
+        <SuggestionsList
+          dataKey={dataKey}
+          highlight={inputValue}
+          suggestions={suggestions}
+          onSuggestionClick={handleSuggestionClick}
+        />
+      </ul>
     </div>
   );
 }
